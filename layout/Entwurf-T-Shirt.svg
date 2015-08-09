@@ -49,9 +49,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3150753"
-     inkscape:cx="44.248088"
-     inkscape:cy="113.18486"
+     inkscape:zoom="2.5800163"
+     inkscape:cx="114.58222"
+     inkscape:cy="124.09274"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -511,7 +511,7 @@
       </g>
     </g>
     <g
-       id="g6901">
+       id="g4346">
       <g
          transform="matrix(0.07880425,0,0,-0.07880425,121.21637,94.986322)"
          id="g4301-7">
@@ -731,13 +731,13 @@
            d="M 0,0 C 0,45.478 36.712,82.345 82,82.345 127.288,82.345 164,45.478 164,0 164,-45.478 127.288,-82.346 82,-82.346 36.712,-82.346 0,-45.478 0,0" />
       </g>
       <g
-         style="stroke:#ffffff"
+         style="stroke:#ffffff;stroke-width:6.34483546;stroke-miterlimit:4;stroke-dasharray:none"
          transform="matrix(0.07880425,0,0,-0.07880425,123.42042,87.368154)"
          id="g4401-4">
         <path
            inkscape:connector-curvature="0"
            id="path4403-4"
-           style="fill:none;stroke:#ffffff;stroke-width:2.22300005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.86400008;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:none;stroke:#ffffff;stroke-width:6.34483546;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            d="M 0,0 C 0,24.574 19.837,44.495 44.309,44.495 68.78,44.495 88.617,24.574 88.617,0 88.617,-24.574 68.78,-44.495 44.309,-44.495 19.837,-44.495 0,-24.574 0,0 Z" />
       </g>
       <g
@@ -761,34 +761,24 @@
            d="m 0,0 -11.079,11.129 -10.434,0 7.386,-7.419 -14.783,-10e-4 0,-7.421 14.783,0.002 -7.386,-7.419 10.434,0 L 0,0 Z" />
       </g>
       <g
-         transform="matrix(0.07880425,0,0,-0.07880425,106.2725,110.0737)"
          style="stroke:#ffffff"
-         id="g4413-6">
-        <g
-           style="stroke:#ffffff"
-           clip-path="url(#clipPath4417-6)"
-           id="g4415-6">
-          <g
-             style="stroke:#ffffff"
-             transform="translate(278.7469,310.5194)"
-             id="g4421-1">
-            <path
-               inkscape:connector-curvature="0"
-               id="path4423-0"
-               style="fill:none;stroke:#ffffff;stroke-width:13.35000038;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.86400008;stroke-dasharray:none;stroke-opacity:1"
-               d="m 0,0 c 0,34.404 27.772,62.293 62.031,62.293 34.26,0 62.031,-27.889 62.031,-62.293 0,-34.403 -27.771,-62.292 -62.031,-62.292 C 27.772,-62.292 0,-34.403 0,0 Z" />
-          </g>
-          <g
-             style="stroke:#ffffff"
-             transform="translate(293.2399,310.5194)"
-             id="g4425-7">
-            <path
-               inkscape:connector-curvature="0"
-               id="path4427-2"
-               style="fill:none;stroke:#ffffff;stroke-width:2.22300005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.86400008;stroke-dasharray:none;stroke-opacity:1"
-               d="M 0,0 C 0,26.366 21.283,47.739 47.538,47.739 73.793,47.739 95.076,26.366 95.076,0 95.076,-26.365 73.793,-47.738 47.538,-47.738 21.283,-47.738 0,-26.365 0,0 Z" />
-          </g>
-        </g>
+         transform="matrix(0.07880425,0,0,-0.07880425,128.23894,85.603452)"
+         id="g4421-1">
+        <path
+           inkscape:connector-curvature="0"
+           id="path4423-0"
+           style="fill:none;stroke:#ffffff;stroke-width:13.35000038;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.86400008;stroke-dasharray:none;stroke-opacity:1"
+           d="m 0,0 c 0,34.404 27.772,62.293 62.031,62.293 34.26,0 62.031,-27.889 62.031,-62.293 0,-34.403 -27.771,-62.292 -62.031,-62.292 C 27.772,-62.292 0,-34.403 0,0 Z" />
+      </g>
+      <g
+         style="stroke:#ffffff;stroke-width:3.17241773;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.07880425,0,0,-0.07880425,129.38105,85.603452)"
+         id="g4425-7">
+        <path
+           inkscape:connector-curvature="0"
+           id="path4427-2"
+           style="fill:none;stroke:#ffffff;stroke-width:3.17241773;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 0,0 C 0,26.366 21.283,47.739 47.538,47.739 73.793,47.739 95.076,26.366 95.076,0 95.076,-26.365 73.793,-47.738 47.538,-47.738 21.283,-47.738 0,-26.365 0,0 Z" />
       </g>
     </g>
     <text
