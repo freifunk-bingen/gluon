@@ -17,7 +17,7 @@ else
                  # <%= hostname %>
                  <br/>
                <%= pubkey %>
-               </div>]]
+               </div><p>]] .. i18n.translate('gluon-config-mode:offlinewarning') .. [[</p>]]
 
   return function ()
            luci.template.render_string(msg, { pubkey=pubkey
