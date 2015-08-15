@@ -1,7 +1,7 @@
 *~
 /build
 /images
-/images*
+/images-*
 /openwrt
 /packages
 /site
