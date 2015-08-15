@@ -1,8 +1,10 @@
 *~
 /build
 /images
-/images-*
 /openwrt
 /packages
 /site
 /modules.local
+# FFBIN specific
+/images-*
+/build_logs
