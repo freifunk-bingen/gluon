@@ -19,6 +19,11 @@ EOHELP
 	exit 1
 fi
 
+# ecdsautil now uses "ecdsautil sign" instead of "ecdsasign"
+# check what we have
+
+if which 
+
 SECRET="$1"
 
 manifest="$2"
