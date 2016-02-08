@@ -35,7 +35,9 @@ export GLUON_LANGS
 ifeq ($(OPENWRT_BUILD),1)
 ifeq ($(GLUON_TOOLS),1)
 
-CONFIG_VERSION_REPO := $(shell $(GLUONDIR)/scripts/site.sh opkg_repo || echo http://downloads.openwrt.org/barrier_breaker/14.07/%S/packages)
+DEFAULT_OPKG_REPO := http://downloads.openwrt.org/chaos_calmer/15.05-rc3/%S/packages
+
+CONFIG_VERSION_REPO := $(shell $(GLUONDIR)/scripts/site.sh opkg_repo || echo '$(DEFAULT_OPKG_REPO)')
 export CONFIG_VERSION_REPO
 
 GLUON_SITE_CODE := $(shell $(GLUONDIR)/scripts/site.sh site_code)
@@ -65,7 +67,7 @@ GLUON_TARGET_$$(gluon_target)_BOARD := $(1)
 GLUON_TARGET_$$(gluon_target)_SUBTARGET := $(2)
 endef
 
-GLUON_DEFAULT_PACKAGES := gluon-core kmod-ipv6 firewall ip6tables -uboot-envtools
+GLUON_DEFAULT_PACKAGES := gluon-core kmod-ipv6 firewall ip6tables -uboot-envtools -wpad-mini hostapd-mini
 
 override DEFAULT_PACKAGES.router :=
 

@@ -52,7 +52,7 @@ include $(GLUONDIR)/include/toplevel.mk
 include $(GLUONDIR)/targets/targets.mk
 
 
-CheckTarget := [ -n '$(GLUON_TARGET)' -a -n '$(GLUON_TARGET_$(GLUON_TARGET)_BOARD)' -a -n '$(GLUON_TARGET_$(GLUON_TARGET)_SUBTARGET)' ] \
+CheckTarget := [ -n '$(GLUON_TARGET)' -a -n '$(GLUON_TARGET_$(GLUON_TARGET)_BOARD)' ] \
 	|| (echo -e 'Please set GLUON_TARGET to a valid target. Gluon supports the following targets:$(subst $(space),\n * ,$(GLUON_TARGETS))'; false)
 
 
@@ -102,6 +102,13 @@ manifest: FORCE
 
 	mkdir -p $(GLUON_IMAGEDIR)/sysupgrade
 	mv $(GLUON_BUILDDIR)/$(GLUON_BRANCH).manifest.tmp $(GLUON_IMAGEDIR)/sysupgrade/$(GLUON_BRANCH).manifest
+
+update-vermagic: FORCE
+	@$(CheckExternal)
+	+($(foreach GLUON_TARGET,$(GLUON_TARGETS), \
+		$(GLUONMAKE_EARLY) maybe-prepare-target GLUON_TARGET='$(GLUON_TARGET)' V=s$(OPENWRT_VERBOSE) && \
+		$(GLUONMAKE) update-vermagic GLUON_TARGET='$(GLUON_TARGET)' V=s$(OPENWRT_VERBOSE) && \
+	) :)
 
 dirclean : FORCE
 	for dir in build_dir dl staging_dir tmp; do \
@@ -179,12 +186,12 @@ include $(INCLUDE_DIR)/target.mk
 prereq: FORCE
 	+$(NO_TRACE_MAKE) prereq
 
-gluon-tools: FORCE
-	+$(GLUONMAKE_EARLY) tools/sed/install
-	+$(GLUONMAKE_EARLY) package/lua/host/install
-
 prepare-tmpinfo: FORCE
+<<<<<<< HEAD
 	@+$(MAKE) -r -s tmp/.prereq-build OPENWRT_BUILD= QUIET=0
+=======
+	@+$(MAKE) -r -s staging_dir/host/.prereq-build OPENWRT_BUILD= QUIET=0
+>>>>>>> 5cc6e820eaf3208183c0a6d5d0b0ef1a281b1832
 	mkdir -p tmp/info
 	$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET="packageinfo" SCAN_DIR="package" SCAN_NAME="package" SCAN_DEPS="$(TOPDIR)/include/package*.mk $(TOPDIR)/overlay/*/*.mk" SCAN_EXTRA=""
 	$(_SINGLE)$(NO_TRACE_MAKE) -j1 -r -s -f include/scan.mk SCAN_TARGET="targetinfo" SCAN_DIR="target/linux" SCAN_NAME="target" SCAN_DEPS="profiles/*.mk $(TOPDIR)/include/kernel*.mk $(TOPDIR)/include/target.mk" SCAN_DEPTH=2 SCAN_EXTRA="" SCAN_MAKEOPTS="TARGET_BUILD=1"
@@ -205,15 +212,24 @@ feeds: FORCE
 	. $(GLUONDIR)/modules && for feed in $$GLUON_FEEDS; do ln -s ../../../packages/$$feed $(TOPDIR)/package/feeds/module_$$feed; done
 	+$(GLUONMAKE_EARLY) prepare-tmpinfo
 
+gluon-tools: FORCE
+	+$(GLUONMAKE_EARLY) tools/sed/install
+	+$(GLUONMAKE_EARLY) package/lua/host/install
+
 config: FORCE
 	+$(NO_TRACE_MAKE) scripts/config/conf OPENWRT_BUILD= QUIET=0
 	+$(GLUONMAKE) prepare-tmpinfo
 	( \
-		cat $(GLUONDIR)/include/config $(GLUONDIR)/targets/$(GLUON_TARGET)/config; \
+		cat $(GLUONDIR)/include/config; \
+		echo 'CONFIG_TARGET_$(GLUON_TARGET_$(GLUON_TARGET)_BOARD)=y'; \
+		$(if $(GLUON_TARGET_$(GLUON_TARGET)_SUBTARGET), \
+			echo 'CONFIG_TARGET_$(GLUON_TARGET_$(GLUON_TARGET)_BOARD)_$(GLUON_TARGET_$(GLUON_TARGET)_SUBTARGET)=y'; \
+		) \
+		cat $(GLUONDIR)/targets/$(GLUON_TARGET)/config 2>/dev/null; \
 		echo 'CONFIG_BUILD_SUFFIX="gluon-$(GLUON_TARGET)"'; \
 		echo '$(patsubst %,CONFIG_PACKAGE_%=m,$(sort $(filter-out -%,$(GLUON_DEFAULT_PACKAGES) $(GLUON_SITE_PACKAGES) $(PROFILE_PACKAGES))))' \
 			| sed -e 's/ /\n/g'; \
-		echo '$(patsubst %,CONFIG_GLUON_LANG_%=y,$(GLUON_LANGS))' \
+		echo '$(patsubst %,CONFIG_LUCI_LANG_%=y,$(GLUON_LANGS))' \
 			| sed -e 's/ /\n/g'; \
 	) > $(BOARD_BUILDDIR)/config.tmp
 	scripts/config/conf --defconfig=$(BOARD_BUILDDIR)/config.tmp Config.in
@@ -282,8 +298,8 @@ packages: $(package/stamp-compile)
 prepare-image: FORCE
 	rm -rf $(BOARD_KDIR)
 	mkdir -p $(BOARD_KDIR)
-	cp $(KERNEL_BUILD_DIR)/vmlinux $(KERNEL_BUILD_DIR)/vmlinux.elf $(BOARD_KDIR)/
-	+$(SUBMAKE) -C $(TOPDIR)/target/linux/$(BOARD)/image -f $(GLUONDIR)/include/Makefile.image prepare KDIR="$(BOARD_KDIR)"
+	-cp $(KERNEL_BUILD_DIR)/* $(BOARD_KDIR)/
+	+$(SUBMAKE) -C $(TOPDIR)/target/linux/$(BOARD)/image image_prepare KDIR="$(BOARD_KDIR)"
 
 prepare: FORCE
 	@$(STAGING_DIR_HOST)/bin/lua $(GLUONDIR)/package/gluon-core/files/usr/lib/lua/gluon/site_config.lua \
@@ -347,7 +363,7 @@ $(eval $(call merge-lists,INSTALL_PACKAGES,DEFAULT_PACKAGES GLUON_DEFAULT_PACKAG
 
 package_install: FORCE
 	$(OPKG) update
-	$(OPKG) install $(PACKAGE_DIR)/libc_*.ipk
+	$(OPKG) install $(PACKAGE_DIR)/base-files_*.ipk $(PACKAGE_DIR)/libc_*.ipk
 	$(OPKG) install $(PACKAGE_DIR)/kernel_*.ipk
 
 	$(OPKG) install $(INSTALL_PACKAGES)
@@ -355,13 +371,15 @@ package_install: FORCE
 
 	rm -f $(TARGET_DIR)/usr/lib/opkg/lists/* $(TARGET_DIR)/tmp/opkg.lock
 
-ifeq ($(GLUON_OPKG_CONFIG),1)
+# Remove opkg database when opkg is not intalled
+	if [ ! -x $(TARGET_DIR)/bin/opkg ]; then rm -rf $(TARGET_DIR)/usr/lib/opkg; fi
+
+
 include $(INCLUDE_DIR)/version.mk
-endif
 
 opkg_config: FORCE
 	cp $(GLUON_OPENWRTDIR)/package/system/opkg/files/opkg.conf $(TARGET_DIR)/etc/opkg.conf
-	for d in base luci packages routing telephony management oldpackages; do \
+	for d in base packages luci routing telephony management; do \
 		echo "src/gz %n_$$d %U/$$d" >> $(TARGET_DIR)/etc/opkg.conf; \
 	done
 	$(VERSION_SED) $(TARGET_DIR)/etc/opkg.conf
@@ -373,10 +391,10 @@ image: FORCE
 	cp -r $(BOARD_KDIR) $(PROFILE_KDIR)
 
 	+$(GLUONMAKE) package_install
-	+$(GLUONMAKE) opkg_config GLUON_OPKG_CONFIG=1
+	+$(GLUONMAKE) opkg_config
 
 	$(call Image/mkfs/prepare)
-	$(_SINGLE)$(NO_TRACE_MAKE) -C $(TOPDIR)/target/linux/$(BOARD)/image install TARGET_BUILD=1 IB=1 IMG_PREFIX=gluon \
+	$(_SINGLE)$(NO_TRACE_MAKE) -C $(TOPDIR)/target/linux/$(BOARD)/image install TARGET_BUILD=1 IMG_PREFIX=gluon \
 		PROFILE="$(PROFILE)" KDIR="$(PROFILE_KDIR)" TARGET_DIR="$(TARGET_DIR)" BIN_DIR="$(BIN_DIR)" TMP_DIR="$(TMP_DIR)"
 
 	$(foreach model,$(GLUON_$(PROFILE)_MODELS), \
@@ -409,7 +427,15 @@ manifest: FORCE
 		) : \
 	) >> $(GLUON_BUILDDIR)/$(GLUON_BRANCH).manifest.tmp
 
+update-vermagic: FORCE
+	mkdir -p '$(BOARD_BUILDDIR)'
+	echo '$(DEFAULT_OPKG_REPO)' > '$(BOARD_BUILDDIR)/default_opkg_repo'
+	$(VERSION_SED) '$(BOARD_BUILDDIR)/default_opkg_repo'
+	wget -q -O- "$$(cat '$(BOARD_BUILDDIR)/default_opkg_repo')/base/Packages.gz" \
+		| gzip -d \
+		| awk '/Depends: kernel / { match($$3,/[[:xdigit:]]{32}/,m); print m[0]; exit }' \
+		> $(GLUONDIR)/targets/$(GLUON_TARGET)/vermagic
 
-.PHONY: all images prepare clean gluon-tools manifest
+.PHONY: all images prepare clean gluon-tools manifest update-vermagic
 
 endif

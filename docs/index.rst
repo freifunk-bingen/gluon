@@ -49,7 +49,10 @@ Releases
 .. toctree::
    :maxdepth: 1
 
+<<<<<<< HEAD
    releases/v2015.1.2
+=======
+>>>>>>> 5cc6e820eaf3208183c0a6d5d0b0ef1a281b1832
    releases/v2015.1.1
    releases/v2015.1
    releases/v2014.4
