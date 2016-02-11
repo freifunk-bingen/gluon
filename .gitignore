@@ -1,5 +1,7 @@
 *~
+/images
 /build
+/build_logs
 /output
 /site
 /openwrt
